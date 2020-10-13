@@ -1,4 +1,4 @@
-<p align="center">
+t of <p align="center">
 <img src="./Screens/screen0.png">
 
 </p>

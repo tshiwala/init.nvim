@@ -4,11 +4,14 @@
   "coc.preferences.snippetStatusText": "Ⓢ ",
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
+    "javascriptreact",
     "html",
     "css",
     "json",
     "markdown",
     "typescript",
+    "typescriptreact",
+    "typescript.tsx",
     "python",
     "dart"
   ],
@@ -73,5 +76,25 @@
 
   // other language specific settings
   "html.autoClosingTags": true,
-  "coc.source.ultisnips.filetypes": []
+  "coc.source.ultisnips.filetypes": [],
+
+  // coc-solargraph
+  "solargraph.diagnostics": false,
+  "solargraph.formatting": true,
+  "solargraph.hover": false,
+  "solargraph.completion": false,
+
+  // coc-explorer
+  "explorer.icon.enableVimDevicons": true,
+  "explorer.icon.enableNerdfont": false,
+  "explorer.icon.customIcons": {
+    "icons": {},
+    "extensions": {},
+    "filenames": {},
+    "dirnames": {},
+    "patternMatches": {},
+    "dirPatternMatches": {}
+  },
+  "explorer.width": 30,
+  "explorer.previewAction.onHover": false
 }

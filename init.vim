@@ -14,6 +14,7 @@ call plug#begin(expand('~/.config/nvim/plugged'))
 " ================= looks and GUI stuff ================== "{{{
 
 Plug 'vim-airline/vim-airline'                          " airline status bar
+Plug 'vim-airline/vim-airline-themes'                   " airline theme
 Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
 Plug 'luochen1990/rainbow'                              " rainbow parenthesis
 Plug 'hzchirs/vim-material'                             " material color themes
@@ -23,7 +24,8 @@ Plug 'Jorengarenar/vim-MvVis'                           " move visual selection
 
 " ================= Functionalities ================= "{{{
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}         " LSP and more
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}         " LSP and more
+Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }     " fzf itself
 Plug 'junegunn/fzf.vim'                                 " fuzzy search integration
 Plug 'honza/vim-snippets'                               " actual snippets
@@ -33,12 +35,24 @@ Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}  " better python
 Plug 'tpope/vim-commentary'                             " better commenting
 Plug 'mhinz/vim-startify'                               " cool start up screen
 Plug 'tpope/vim-fugitive'                               " git support
+Plug 'tpope/vim-rhubarb'                                " hub support (:Gbrowse)
+Plug 'tpope/vim-rails'                                  " Vim plugin for editing Ruby on Rails applications
 Plug 'psliwka/vim-smoothie'                             " some very smooth ass scrolling
 Plug 'wellle/tmux-complete.vim'                         " complete words from a tmux panes
 Plug 'tpope/vim-eunuch'                                 " run common Unix commands inside Vim
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'machakann/vim-sandwich'                           " make sandwiches
 Plug 'christoomey/vim-tmux-navigator'                   " seamless vim and tmux navigation
+Plug 'jfo/hound.vim'                                    " A plugin to talk to Etsy's Hound trigram search
+Plug 'mattn/webapi-vim'
+Plug 'jparise/vim-graphql'                              " GraphQL file detection, syntax highlighting, and indentation.
+
+" Javascript stuff
+Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 Plug 'TovarishFin/vim-solidity'
 call plug#end()
@@ -76,6 +90,8 @@ set inccommand=nosplit                                  " visual feedback while 
 set showtabline=2                                       " always show tabline
 set grepprg=rg\ --vimgrep                               " use rg as default grepper
 
+set showmatch                                           " Show matching brackets when text indicator is over them
+
 " performance tweaks
 set nocursorline
 set nocursorcolumn
@@ -93,6 +109,14 @@ set cmdheight=1
 set updatetime=300
 set shortmess+=c
 set signcolumn=yes
+
+" Hound
+let g:hound_base_url = "hound.etsycorp.com"
+let g:hound_port = "6080"
+let g:hound_repos = "Etsyweb,BigData,Dashboards"
+
+" fonts (not working)
+set guifont=Fira\ Code:h12
 
 " Themeing
 let g:material_style = 'oceanic'
@@ -123,7 +147,10 @@ let g:omni_sql_no_default_maps = 1                      " disable sql omni compl
 let g:loaded_python_provider = 0
 let g:loaded_perl_provider = 0
 let g:loaded_ruby_provider = 0
-let g:python3_host_prog = expand('/usr/bin/python3')
+
+" let g:python_host_prog = expand('/Users/ashiwala/.pyenv/shims/python2')
+" let g:python3_host_prog = expand('/Users/ashiwala/.pyenv/shims/python3')
+let g:python3_host_prog = system('type pyenv &>/dev/null && echo -n "$(pyenv root)/versions/$(cat $(pyenv root)/version | head -n 1)/bin/python" || echo -n $(which python3)')
 
 " Airline
 let g:airline_theme='material'
@@ -133,7 +160,7 @@ let g:airline_section_x=''
 let g:airline_section_z = airline#section#create(['%3p%% ', 'linenr', ':%c'])
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_min_count = 2   " show tabline only if there is more than 1 buffer
+" let g:airline#extensions#tabline#buffer_min_count = 2   " show tabline only if there is more than 1 buffer
 let g:airline#extensions#tabline#fnamemod = ':t'        " show only file name on tabs
 let airline#extensions#coc#error_symbol = '✘:'
 let airline#extensions#coc#warning_symbol = '⚠:'
@@ -170,6 +197,7 @@ let g:coc_global_extensions = [
             \'coc-marketplace',
             \'coc-highlight',
             \'coc-flutter',
+            \'coc-explorer',
             \]
 
 " indentLine
@@ -179,6 +207,7 @@ let g:indentLine_setConceal = 0                         " actually fix the annoy
 let g:indentLine_fileTypeExclude = ['startify']
 
 "" startify
+let g:webdevicons_enable_startify = 1
 let g:startify_padding_left = 10
 let g:startify_session_persistence = 1
 let g:startify_enable_special = 0
@@ -243,6 +272,9 @@ let $FZF_DEFAULT_OPTS = '--layout=reverse --inline-info'
 let $FZF_DEFAULT_COMMAND = "rg --files --hidden --glob '!.git/**' --glob '!build/**' --glob '!.dart_tool/**' --glob '!.idea' --glob '!node_modules'"
 
 "}}}
+
+"fugitive
+let g:github_enterprise_urls = ['https://github.etsycorp.com']
 
 " ======================== Commands ============================= "{{{
 
@@ -352,6 +384,8 @@ nmap <Tab> :bnext<CR>
 nmap <S-Tab> :bprevious<CR>
 noremap <leader>e :PlugInstall<CR>
 noremap <C-q> :q<CR>
+inoremap jk <ESC>
+inoremap kj <ESC>
 
 " new line in normal mode and back
 map <Enter> o<ESC>
@@ -381,6 +415,9 @@ nnoremap <C-l> <C-w>l
 " disable hl with 2 esc
 noremap <silent><esc> <esc>:noh<CR><esc>
 
+"" Disable highlight when <leader><cr> is pressed
+" map <silent> <leader><cr> :noh<cr>
+
 " trim white spaces
 nnoremap <F2> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 
@@ -403,6 +440,10 @@ imap <F1> <plug>(fzf-maps-i)
 vmap <F1> <plug>(fzf-maps-x)
 
 "" coc
+
+" coc-explorer
+nmap <space>e :CocCommand explorer<CR>
+autocmd BufEnter * if (winnr("$") == 1 && &filetype == 'coc-explorer') | q | endif
 
 " use tab to navigate snippet placeholders
 inoremap <silent><expr> <TAB>
@@ -453,3 +494,4 @@ nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
 
 "}}}
+
