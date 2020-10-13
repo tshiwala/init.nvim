@@ -2,11 +2,14 @@
   // normal settings
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
+    "javascriptreact",
     "html",
     "css",
     "json",
     "markdown",
     "typescript",
+    "typescriptreact",
+    "typescript.tsx",
     "python",
     "dart"
   ],
@@ -74,4 +77,18 @@
   "prettier.proseWrap": "always",
   "python.formatting.provider": "black",
   "sh.enable": true
+
+  // coc-explorer
+  "explorer.icon.source": "vim-devicons",
+  "explorer.icon.enableNerdfont": true,
+  "explorer.icon.customIcons": {
+    "icons": {},
+    "extensions": {},
+    "filenames": {},
+    "dirnames": {},
+    "patternMatches": {},
+    "dirPatternMatches": {}
+  },
+  "explorer.width": 30,
+  "explorer.previewAction.onHover": false
 }

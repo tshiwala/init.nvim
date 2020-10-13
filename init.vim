@@ -25,6 +25,17 @@ endif
 Plug 'tpope/vim-eunuch'                                 " run common Unix commands inside Vim
 Plug 'machakann/vim-sandwich'                           " make sandwiches
 Plug 'Jorengarenar/vim-MvVis'                           " move visual selection
+Plug 'tpope/vim-rhubarb'                                " hub support (:Gbrowse)
+Plug 'tpope/vim-rails'                                  " Vim plugin for editing Ruby on Rails applications
+Plug 'jfo/hound.vim'                                    " A plugin to talk to Etsy's Hound trigram search
+Plug 'mattn/webapi-vim'
+Plug 'jparise/vim-graphql'                              " GraphQL file detection, syntax highlighting, and indentation.
+
+" Javascript stuff
+Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 
 if !exists('g:vscode')
     Plug 'unblevable/quick-scope'                           " highlight f-t markers
@@ -43,6 +54,7 @@ if !exists('g:vscode')
     Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
     Plug 'memgraph/cypher.vim'
 endif
+
 call plug#end()
 
 "}}}
@@ -78,6 +90,8 @@ set inccommand=nosplit                                  " visual feedback while 
 set showtabline=0                                       " always show tabline
 set grepprg=rg\ --vimgrep                               " use rg as default grepper
 
+set showmatch                                           " Show matching brackets when text indicator is over them
+
 " performance tweaks
 set nocursorline
 set nocursorcolumn
@@ -95,6 +109,14 @@ set cmdheight=1
 set updatetime=300
 set shortmess+=c
 set signcolumn=yes
+
+" Hound
+let g:hound_base_url = "hound.etsycorp.com"
+let g:hound_port = "6080"
+let g:hound_repos = "Etsyweb,BigData,Dashboards"
+
+" fonts (not working)
+set guifont=Fira\ Code:h12
 
 " Themeing
 let g:material_style = 'oceanic'
@@ -169,6 +191,8 @@ let g:coc_global_extensions = [
             \'coc-marketplace',
             \'coc-highlight',
             \'coc-sh',
+            \'coc-flutter',
+            \'coc-explorer',
             \]
 
 " indentLine
@@ -178,6 +202,7 @@ let g:indentLine_setConceal = 0                         " actually fix the annoy
 let g:indentLine_fileTypeExclude = ['startify']
 
 "" startify
+let g:webdevicons_enable_startify = 1
 let g:startify_padding_left = 10
 let g:startify_session_persistence = 1
 let g:startify_enable_special = 0
@@ -242,6 +267,9 @@ let $FZF_DEFAULT_OPTS = '--layout=reverse --inline-info'
 let $FZF_DEFAULT_COMMAND = "rg --files --hidden --glob '!.git/**' --glob '!build/**' --glob '!.dart_tool/**' --glob '!.idea' --glob '!node_modules'"
 
 "}}}
+
+"fugitive
+let g:github_enterprise_urls = ['https://github.etsycorp.com']
 
 " ======================== Commands ============================= "{{{
 
@@ -350,6 +378,13 @@ let mapleader=","
 nmap <leader>r :so ~/.config/nvim/init.vim<CR>
 nnoremap ; :
 nmap <leader>w :w<CR>
+map <leader>s :Format<CR>
+nmap <Tab> :bnext<CR>
+nmap <S-Tab> :bprevious<CR>
+noremap <leader>e :PlugInstall<CR>
+noremap <C-q> :q<CR>
+inoremap jk <ESC>
+inoremap kj <ESC>
 
 " new line in normal mode and back
 map <Enter> o<ESC>
