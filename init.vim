@@ -30,6 +30,7 @@ Plug 'tpope/vim-rails'                                  " Vim plugin for editing
 Plug 'jfo/hound.vim'                                    " A plugin to talk to Etsy's Hound trigram search
 Plug 'mattn/webapi-vim'
 Plug 'jparise/vim-graphql'                              " GraphQL file detection, syntax highlighting, and indentation.
+Plug 'dart-lang/dart-vim-plugin'
 
 " Javascript stuff
 Plug 'pangloss/vim-javascript'
