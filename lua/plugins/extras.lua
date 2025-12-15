@@ -32,7 +32,7 @@ return {
           g = true,
         },
       },
-      window = {
+      win = {
         border = "rounded",
         position = "bottom",
       },
