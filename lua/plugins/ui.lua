@@ -156,6 +156,17 @@ return {
   -- Web DevIcons
   -- ==========================================================================
   {
+    "echasnovski/mini.icons",
+    lazy = false,  -- Load immediately so icons are available
+    priority = 200,  -- Load before other plugins that need icons
+    opts = {},
+    config = function(_, opts)
+      local icons = require("mini.icons")
+      icons.setup(opts)
+      MiniIcons.mock_nvim_web_devicons()  -- Provide icons to plugins expecting devicons
+    end,
+  },
+  {
     "nvim-tree/nvim-web-devicons",
     lazy = true,
     opts = {
