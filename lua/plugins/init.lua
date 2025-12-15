@@ -25,10 +25,13 @@ require("lazy").setup({
 
   -- Plugins are organized in separate files and imported here
   { import = "plugins.treesitter" },
+  { import = "plugins.lualine" },
+  { import = "plugins.dashboard" },
+  { import = "plugins.ui" },
 
   -- Future plugins to be added incrementally:
   -- { import = "plugins.telescope" },
-  -- { import = "plugins.ui" },
+  -- { import = "plugins.neo-tree" },
   -- { import = "plugins.coc" },
   -- etc.
 
