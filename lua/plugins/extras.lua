@@ -34,7 +34,6 @@ return {
       },
       win = {
         border = "rounded",
-        position = "bottom",
       },
     },
   },

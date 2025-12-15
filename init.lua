@@ -26,5 +26,12 @@ require("core")
 -- - init.vim is no longer sourced (backed up as init.vim.bak)
 -- - statusline.vim is no longer needed (replaced by lualine)
 -- - All plugins configured via lazy.nvim
+
+
+
+
+
+
+
 -- - All settings, keymaps, and autocmds in Lua
 -- ============================================================================

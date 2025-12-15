@@ -7,16 +7,11 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile" },
+    lazy = false,  -- Load immediately so TS commands are always available
+    priority = 100,  -- Load early
     config = function()
-      -- Safely load treesitter configs
-      local status_ok, configs = pcall(require, "nvim-treesitter.configs")
-      if not status_ok then
-        vim.notify("nvim-treesitter.configs not found. Please run :Lazy sync", vim.log.levels.WARN)
-        return
-      end
-
-      configs.setup({
+      -- Load treesitter configuration (using the main module)
+      require("nvim-treesitter").setup({
         -- ========================================================================
         -- Language Parsers
         -- ========================================================================
