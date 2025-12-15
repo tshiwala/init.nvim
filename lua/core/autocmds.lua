@@ -33,13 +33,18 @@ autocmd("BufWritePre", {
   desc = "Remove trailing whitespaces before saving",
 })
 
--- Highlight on cursor hold
+-- Highlight on cursor hold (CoC)
+-- Note: This is also configured in lua/plugins/coc.lua
+-- Keeping it here for reference but it may be redundant
 autocmd("CursorHold", {
   pattern = "*",
   callback = function()
-    vim.fn.CocActionAsync("highlight")
+    -- Check if CoC is loaded and ready
+    if vim.g.coc_service_initialized == 1 then
+      vim.fn.CocActionAsync("highlight")
+    end
   end,
-  desc = "Highlight match on cursor hold",
+  desc = "Highlight match on cursor hold (CoC)",
 })
 
 -- ============================================================================
@@ -184,14 +189,15 @@ autocmd("BufReadPost", {
 
 local python_group = augroup("python", { clear = true })
 
--- Python renaming with Semshi (will be replaced by LSP)
+-- Python renaming (using CoC LSP, not Semshi anymore since we have Treesitter)
 autocmd("FileType", {
   group = python_group,
   pattern = "python",
   callback = function()
-    vim.keymap.set("n", "<leader>rn", ":Semshi rename<CR>", { buffer = true, desc = "Rename symbol" })
+    -- CoC rename is already mapped globally in lua/plugins/coc.lua
+    -- This is just a note that <leader>rn works for Python via CoC
   end,
-  desc = "Python rename mapping",
+  desc = "Python file type setup",
 })
 
 -- Python folding
