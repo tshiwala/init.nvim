@@ -12,6 +12,7 @@ Modern Neovim configuration fully migrated to Lua with contemporary plugins and 
 - 📁 **Neo-tree** - Modern file explorer with git integration
 - 💡 **CoC.nvim** - Full LSP support for multiple languages
 - 🤖 **GitHub Copilot** - AI-powered code completion
+- 🧠 **Claude AI (Avante)** - Cursor-like AI assistant with Claude Sonnet
 - 🎯 **Git Integration** - Gitsigns, LazyGit, and Fugitive
 - 📊 **Lualine** - Beautiful customizable statusline
 - 🚀 **Many More** - See full plugin list below
@@ -40,7 +41,8 @@ Modern Neovim configuration fully migrated to Lua with contemporary plugins and 
 
 - **tmux** - For seamless terminal integration
 - **LazyGit** - For git TUI (Leader+gg)
-- **GitHub Copilot** - Requires subscription
+- **GitHub Copilot** - Requires GitHub Copilot subscription
+- **Claude API** - For Avante AI assistant (get key from https://console.anthropic.com/)
 - **bat** - For better file previews in Telescope
 - **prettier** - For code formatting
 - **black** - For Python formatting
@@ -56,6 +58,25 @@ git clone https://github.com/yourusername/nvim-config ~/.config/nvim
 
 # Start Neovim - plugins will install automatically
 nvim
+```
+
+### API Keys Setup
+
+For AI features to work, you need to set up API keys in `~/.env`:
+
+```bash
+# Edit ~/.env and add your API keys
+export ANTHROPIC_API_KEY="your-anthropic-api-key-here"  # For Claude/Avante
+export OPEN_API_KEY="your-openai-api-key-here"         # For OpenAI (if needed)
+```
+
+**Get your API keys:**
+- Claude: https://console.anthropic.com/
+- OpenAI: https://platform.openai.com/api-keys
+
+Then source your shell config:
+```bash
+source ~/.zshrc  # or ~/.bashrc
 ```
 
 ## Directory Structure
@@ -78,7 +99,8 @@ nvim
 │   │   ├── lualine.lua     # Statusline
 │   │   ├── coc.lua         # LSP configuration
 │   │   ├── git.lua         # Git integration
-│   │   ├── copilot.lua     # AI assistance
+│   │   ├── copilot.lua     # GitHub Copilot
+│   │   ├── avante.lua      # Claude AI assistant
 │   │   ├── ui.lua          # UI enhancements
 │   │   ├── dashboard.lua   # Start screen
 │   │   └── extras.lua      # Additional plugins
@@ -122,7 +144,12 @@ nvim
 
 ### AI & Productivity
 - **copilot.lua** - GitHub Copilot integration
-- **CopilotChat.nvim** - Interactive AI chat
+- **CopilotChat.nvim** - Interactive AI chat with Copilot
+- **avante.nvim** - Claude AI assistant (Cursor-like experience)
+  - Powered by Claude Sonnet 4.5
+  - Inline code suggestions and explanations
+  - Side-by-side diff view
+  - Context-aware assistance
 
 ### Other
 - **toggleterm.nvim** - Terminal management
@@ -158,6 +185,16 @@ Leader key: `,` (comma)
 | `Leader+/` | Live grep |
 | `Leader+fr` | Recent files |
 | `Leader+fh` | Help tags |
+
+### Neo-tree (File Explorer)
+| Action | Command/Mapping |
+|--------|-----------------|
+| Toggle tree | `:Neotree toggle` or `Leader+e` |
+| Focus tree | `:Neotree focus` or `Leader+o` |
+| Hide dotfiles by default | Configured (dotfiles start hidden) |
+| Toggle hidden/dotfiles | `H` inside Neo-tree |
+| Set root to current dir | `.` |
+| Go up one level | `<BS>` |
 | `Leader+fk` | Keymaps |
 
 ### LSP (CoC.nvim)
@@ -189,7 +226,7 @@ Leader key: `,` (comma)
 ### Copilot
 | Mapping | Functionality |
 |---------|---------------|
-| `Alt+l` | Accept suggestion |
+| `Tab` | Accept Copilot suggestion |
 | `Alt+]` | Next suggestion |
 | `Alt+[` | Previous suggestion |
 | `Ctrl+]` | Dismiss suggestion |
@@ -197,6 +234,21 @@ Leader key: `,` (comma)
 | `Leader+ce` | Explain code |
 | `Leader+cr` | Review code |
 | `Leader+cf` | Fix code |
+
+### Claude AI (Avante)
+| Mapping | Functionality |
+|---------|---------------|
+| `Leader+aa` | Ask Claude (normal/visual) |
+| `Leader+ar` | Refresh Claude response |
+| `Leader+ae` | Edit with Claude (visual) |
+| `]]` / `[[` | Jump to next/previous diff |
+| `]x` / `[x` | Next/previous conflict |
+| **In Avante sidebar:** | |
+| `<CR>` | Apply suggestion (normal) |
+| `Ctrl+s` | Apply suggestion (insert) |
+| `a` | Apply at cursor |
+| `A` | Apply all |
+| `Tab` / `Shift+Tab` | Switch windows |
 
 ### Other
 | Mapping | Functionality |
@@ -218,6 +270,7 @@ Leader key: `,` (comma)
 | `:Telescope` | Open Telescope |
 | `:Neotree` | File explorer |
 | `:LazyGit` | Open LazyGit |
+| `:AvanteAsk` | Ask Claude AI |
 | `:checkhealth` | Check Neovim health |
 
 ## Customization
@@ -286,6 +339,18 @@ This configuration was fully migrated from VimScript to Lua. Old files are backe
 :TSUpdate
 :TSInstall <language>
 ```
+
+### Claude/Avante not working
+1. Check that your API key is set in `~/.env`:
+   ```bash
+   echo $ANTHROPIC_API_KEY
+   ```
+2. Make sure you sourced your shell config:
+   ```bash
+   source ~/.zshrc
+   ```
+3. Restart Neovim completely
+4. Check for errors: `:messages`
 
 ## Performance
 

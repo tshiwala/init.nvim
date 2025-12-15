@@ -103,6 +103,8 @@ return {
       local keymap = vim.keymap.set
 
       -- Tab for completion navigation
+      -- Note: Copilot.lua handles Tab internally when it has a suggestion
+      -- This mapping only triggers when Copilot doesn't have a suggestion
       keymap("i", "<TAB>", function()
         if vim.fn.pumvisible() == 1 then
           return "<C-n>"

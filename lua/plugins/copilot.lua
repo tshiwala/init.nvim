@@ -30,7 +30,7 @@ return {
           auto_trigger = true,
           debounce = 75,
           keymap = {
-            accept = "<M-l>",
+            accept = "<Tab>",      -- Use Tab to accept Copilot suggestions
             accept_word = false,
             accept_line = false,
             next = "<M-]>",
@@ -142,16 +142,19 @@ return {
       },
     },
     config = function(_, opts)
-      local chat = require("CopilotChat")
-      chat.setup(opts)
+      -- Defer setup to avoid notification errors during startup
+      vim.schedule(function()
+        local chat = require("CopilotChat")
+        chat.setup(opts)
 
-      vim.api.nvim_create_autocmd("BufEnter", {
-        pattern = "copilot-*",
-        callback = function()
-          vim.opt_local.relativenumber = false
-          vim.opt_local.number = false
-        end,
-      })
+        vim.api.nvim_create_autocmd("BufEnter", {
+          pattern = "copilot-*",
+          callback = function()
+            vim.opt_local.relativenumber = false
+            vim.opt_local.number = false
+          end,
+        })
+      end)
     end,
   },
 }
