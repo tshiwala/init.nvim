@@ -28,10 +28,11 @@ require("lazy").setup({
   { import = "plugins.lualine" },
   { import = "plugins.dashboard" },
   { import = "plugins.ui" },
+  { import = "plugins.telescope" },
 
   -- Future plugins to be added incrementally:
-  -- { import = "plugins.telescope" },
   -- { import = "plugins.neo-tree" },
+  -- { import = "plugins.gitsigns" },
   -- { import = "plugins.coc" },
   -- etc.
 
