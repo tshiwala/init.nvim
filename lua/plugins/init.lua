@@ -32,9 +32,9 @@ require("lazy").setup({
   { import = "plugins.neo-tree" },
   { import = "plugins.git" },
   { import = "plugins.copilot" },
+  { import = "plugins.coc" },
 
   -- Future plugins to be added incrementally:
-  -- { import = "plugins.coc" },
   -- { import = "plugins.extras" },
   -- etc.
 
