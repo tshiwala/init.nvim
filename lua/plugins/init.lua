@@ -29,10 +29,11 @@ require("lazy").setup({
   { import = "plugins.dashboard" },
   { import = "plugins.ui" },
   { import = "plugins.telescope" },
+  { import = "plugins.neo-tree" },
 
   -- Future plugins to be added incrementally:
-  -- { import = "plugins.neo-tree" },
-  -- { import = "plugins.gitsigns" },
+  -- { import = "plugins.git" },
+  -- { import = "plugins.copilot" },
   -- { import = "plugins.coc" },
   -- etc.
 
