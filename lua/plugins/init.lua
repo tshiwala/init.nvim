@@ -33,10 +33,7 @@ require("lazy").setup({
   { import = "plugins.git" },
   { import = "plugins.copilot" },
   { import = "plugins.coc" },
-
-  -- Future plugins to be added incrementally:
-  -- { import = "plugins.extras" },
-  -- etc.
+  { import = "plugins.extras" },
 
 }, {
   -- ============================================================================
