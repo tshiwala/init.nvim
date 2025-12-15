@@ -40,6 +40,11 @@ require("lazy").setup({
   -- Lazy.nvim Options
   -- ============================================================================
 
+  -- Disable luarocks support (we don't need it)
+  rocks = {
+    enabled = false,
+  },
+
   -- UI Configuration
   ui = {
     border = "rounded",
