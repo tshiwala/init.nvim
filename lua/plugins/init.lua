@@ -23,14 +23,13 @@ require("lazy").setup({
   -- Plugin Specifications
   -- ============================================================================
 
-  -- Plugins will be added incrementally during migration
-  -- For now, lazy.nvim is installed but no plugins are loaded
-  -- This allows us to test the plugin manager without conflicts
+  -- Plugins are organized in separate files and imported here
+  { import = "plugins.treesitter" },
 
-  -- Future plugins will be organized in separate files and imported here:
-  -- { import = "plugins.treesitter" },
+  -- Future plugins to be added incrementally:
   -- { import = "plugins.telescope" },
   -- { import = "plugins.ui" },
+  -- { import = "plugins.coc" },
   -- etc.
 
 }, {
