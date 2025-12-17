@@ -58,7 +58,7 @@ return {
   -- Copilot chat for interactive AI assistance
   {
     "CopilotC-Nvim/CopilotChat.nvim",
-    branch = "canary",
+    branch = "main",
     dependencies = {
       { "zbirenbaum/copilot.lua" },
       { "nvim-lua/plenary.nvim" },
@@ -133,28 +133,25 @@ return {
         show_diff = {
           normal = "gd",
         },
-        show_system_prompt = {
+        show_info = {
           normal = "gp",
         },
-        show_user_selection = {
+        show_context = {
           normal = "gs",
         },
       },
     },
     config = function(_, opts)
-      -- Defer setup to avoid notification errors during startup
-      vim.schedule(function()
-        local chat = require("CopilotChat")
-        chat.setup(opts)
+      local chat = require("CopilotChat")
+      chat.setup(opts)
 
-        vim.api.nvim_create_autocmd("BufEnter", {
-          pattern = "copilot-*",
-          callback = function()
-            vim.opt_local.relativenumber = false
-            vim.opt_local.number = false
-          end,
-        })
-      end)
+      vim.api.nvim_create_autocmd("BufEnter", {
+        pattern = "copilot-*",
+        callback = function()
+          vim.opt_local.relativenumber = false
+          vim.opt_local.number = false
+        end,
+      })
     end,
   },
 }
