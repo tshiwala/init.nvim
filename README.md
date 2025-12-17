@@ -1,255 +1,370 @@
-<p align="center">
-<img src="./Screens/screen0.png">
+# Neovim Configuration
 
-</p>
-
-## Why?
-
-Modern Vim distributions are really huge and bloated with way too many fancy
-features that you won't ever use or need, for example directory trees like Nerd
-tree, you don't need a tree, you can view a project structure with fzf which is
-faster and has search. Another example is
-[ThinkVim](https://github.com/hardcoreplayers/ThinkVim) has a separate extension
-for formatting while also having ALE which can do that as well, this double
-functionality is very common, thats one of the things this distro avoids, KISS!
+Modern Neovim configuration fully migrated to Lua with contemporary plugins and features.
 
 ## Features
 
-- Single file (you don't want your dotfiles to be all Vim script)
-- Super minimal (~400 lines)
-- Super fast startup (less than 40ms!)
-- Lazy loading plugins
-- Highly customizable
-- Beautiful [Material ocean](https://github.com/material-ocean/Material-Ocean)
-  color scheme
-- Various IDE features via [coc.nvim](https://github.com/neoclide/coc.nvim)
-- Smooth Scrolling (its really smooth!)
-- Fully integrated with fzf (see [demos](#demos))
-- Live Markdown preview
-- Simple, Intuitive shortcuts
+- ✨ **Modern Lua Configuration** - Fully migrated from VimScript to Lua
+- ⚡ **Fast Startup** - Lazy loading with lazy.nvim plugin manager
+- 🎨 **Material Ocean Theme** - Beautiful color scheme with custom highlights
+- 🌳 **Treesitter** - Advanced syntax highlighting and code understanding
+- 🔍 **Telescope** - Powerful fuzzy finder for files, grep, and more
+- 📁 **Neo-tree** - Modern file explorer with git integration
+- 💡 **CoC.nvim** - Full LSP support for multiple languages
+- 🤖 **GitHub Copilot** - AI-powered code completion
+- 🧠 **Claude AI (Avante)** - Cursor-like AI assistant with Claude Sonnet
+- 🎯 **Git Integration** - Gitsigns, LazyGit, and Fugitive
+- 📊 **Lualine** - Beautiful customizable statusline
+- 🚀 **Many More** - See full plugin list below
 
-### Supported Languages
+## Supported Languages
 
-Neovim provides support for a wide range of languages by default. For more
-languages install [vim-polyglot](https://github.com/sheerun/vim-polyglot).
+- Python (coc-pyright)
+- JavaScript/TypeScript (coc-tsserver)
+- HTML/CSS (coc-html, coc-css)
+- Ruby
+- PHP
+- Dart
+- C/C++ (coc-clangd)
+- And many more via CoC extensions
 
 ## Requirements
 
-- Linux (not tested on other platforms)
-- Neovim (you can try regular Vim)
-- Properly set up environment
+- **Neovim** >= 0.9.0
+- **Git** - For plugin management
+- **Node.js** >= 16 - For CoC.nvim
+- **Python 3** - For pynvim (`pip3 install pynvim`)
+- **Ripgrep** - For Telescope live grep
+- **A Nerd Font** - For icons (recommended: FiraCode Nerd Font)
 
-## Setup
+### Optional but Recommended
 
-To check if your current environment is correctly set up run `:CheckHealth`.
-
-### Environment
-
-- python3: `pip3 install --user pynvim`
-- javascript: `yarn global add neovim`
-
-### Tools
-
-- [Any patched nerd font](https://github.com/ryanoasis/nerd-fonts/)
-- [tmux](https://github.com/tmux/tmux) (not required but recommended)
-- [prettier](https://prettier.io/)
-- clang (much better C and C++)
-- [fuzzy finder (fzf)](https://github.com/junegunn/fzf)
-- [ripgrep](https://github.com/BurntSushi/ripgrep)
-- [bat](https://github.com/sharkdp/bat)
-- [black](https://black.readthedocs.io/en/latest/) for python formatting
+- **tmux** - For seamless terminal integration
+- **LazyGit** - For git TUI (Leader+gg)
+- **GitHub Copilot** - Requires GitHub Copilot subscription
+- **Claude API** - For Avante AI assistant (get key from https://console.anthropic.com/)
+- **bat** - For better file previews in Telescope
+- **prettier** - For code formatting
+- **black** - For Python formatting
 
 ## Installation
 
-After installing the requirements:
+```bash
+# Backup existing config if you have one
+mv ~/.config/nvim ~/.config/nvim.backup
 
-- `git clone https://github.com/Blacksuan19/init.nvim ~/.config/nvim`
-- Start `nvim` and it will do the rest
-- press enter if there are any errors (don't worry its fine)
+# Clone this configuration
+git clone https://github.com/yourusername/nvim-config ~/.config/nvim
 
-## Plugins
+# Start Neovim - plugins will install automatically
+nvim
+```
 
-Thanks to vim-plug the plugins are lazy loaded (anything that is not needed for
-the current buffer is not loaded) for example opening a python file means all
-other non python related plugins are not loaded. Coc extensions are lazy loaded
-as well, they work the same way as vim-plug plugins.
+### API Keys Setup
 
-| Plugin                                                              | Functionality                                |
-| ------------------------------------------------------------------- | -------------------------------------------- |
-| [vim-airline](https://github.com/vim-airline/vim-airline)           | airline status line                          |
-| [devicons](https://github.com/ryanoasis/vim-devicons)               | icons everywhere                             |
-| [rainbow](https://github.com/luochen1990/rainbow)                   | rainbow parenthesis                          |
-| [vim-material](https://github.com/hzchirs/vim-material)             | material themes                              |
-| [coc.nvim](https://github.com/neoclide/coc.nvim)                    | async completion and more                    |
-| [fzf.vim](https://github.com/junegunn/fzf.vim)                      | fuzzy finder vim integration                 |
-| [vim-snippets](https://github.com/honza/vim-snippets)               | snippets for many languages                  |
-| [indentLine](https://github.com/Yggdroot/indentLine)                | auto indent lines                            |
-| [vim-commentary](https://github.com/tpope/vim-commentary)           | better comments everywhere                   |
-| [vim-startify](https://github.com/mhinz/vim-startify)               | cool startup thingy                          |
-| [vim-fugitive](https://github.com/tpope/vim-fugitive)               | best git integration around                  |
-| [vim-sandwich](https://github.com/machakann/vim-sandwich)           | surround stuff with stuff                    |
-| [vim-smoothie](https://github.com/psliwka/vim-smoothie)             | super smooth scrolling                       |
-| [tmux-navigator](https://github.com/christoomey/vim-tmux-navigator) | seamless movement between Vim and tmux panes |
-| [tmux-complete](https://github.com/wellle/tmux-complete.vim)        | tmux panes completion                        |
-| [vim-eunuch](https://github.com/tpope/vim-eunuch)                   | some common Linux commands                   |
-| [semshi](https://github.com/numirias/semshi)                        | better highlighting for python               |
-| [markdown-preview](https://github.com/iamcco/markdown-preview.nvim) | live markdown preview                        |
-| [vim-MvVis](https://github.com/Jorengarenar/vim-MvVis)              | move visual selection                        |
+For AI features to work, you need to set up API keys in `~/.env`:
 
-## Keyboard shortcuts
+```bash
+# Edit ~/.env and add your API keys
+export ANTHROPIC_API_KEY="your-anthropic-api-key-here"  # For Claude/Avante
+export OPEN_API_KEY="your-openai-api-key-here"         # For OpenAI (if needed)
+```
 
-To learn the default Vim shortcuts run `Tutor` and or checkout this
-[vim adventures](https://vim-adventures.com/).
+**Get your API keys:**
+- Claude: https://console.anthropic.com/
+- OpenAI: https://platform.openai.com/api-keys
 
-#### Essentials
+Then source your shell config:
+```bash
+source ~/.zshrc  # or ~/.bashrc
+```
 
-| Mapping      | functionality                        |
-| ------------ | ------------------------------------ |
-| `;`          | commands key                         |
-| `,`          | leader key                           |
-| `leader + r` | reload nvim config                   |
-| `leader + w` | save changes                         |
-| `leader + e` | call :PlugInstall (install plug-ins) |
-| `Enter`      | enter empty line in normal mode      |
-| `F2`         | trim white spaces                    |
-| `F6`         | open Startify                        |
+## Directory Structure
 
-#### Visual Mode Essentials
+```
+~/.config/nvim/
+├── init.lua                 # Main entry point
+├── lua/
+│   ├── core/
+│   │   ├── init.lua        # Core module loader
+│   │   ├── options.lua     # Vim options
+│   │   ├── keymaps.lua     # Key mappings
+│   │   ├── autocmds.lua    # Autocommands
+│   │   └── colors.lua      # Color customizations
+│   ├── plugins/
+│   │   ├── init.lua        # Plugin manager (lazy.nvim)
+│   │   ├── treesitter.lua  # Syntax highlighting
+│   │   ├── telescope.lua   # Fuzzy finder
+│   │   ├── neo-tree.lua    # File explorer
+│   │   ├── lualine.lua     # Statusline
+│   │   ├── coc.lua         # LSP configuration
+│   │   ├── git.lua         # Git integration
+│   │   ├── copilot.lua     # GitHub Copilot
+│   │   ├── avante.lua      # Claude AI assistant
+│   │   ├── ui.lua          # UI enhancements
+│   │   ├── dashboard.lua   # Start screen
+│   │   └── extras.lua      # Additional plugins
+│   └── utils/
+│       └── init.lua        # Utility functions
+└── coc-settings.json       # CoC LSP settings
+```
 
-| Mapping    | functionality                   |
-| ---------- | ------------------------------- |
-| `ctrl + j` | move selected text to bottom    |
-| `ctrl + k` | move selected text to top       |
-| `ctrl + h` | move selected text to the left  |
-| `ctrl + l` | move selected text to the right |
+## Plugin List
 
-#### Navigation
+### Core Functionality
+- **lazy.nvim** - Modern plugin manager
+- **nvim-treesitter** - Advanced syntax highlighting
+- **telescope.nvim** - Fuzzy finder and picker
+- **neo-tree.nvim** - File explorer
+- **coc.nvim** - LSP and completion
 
-`ctrl + hjkl` navigation also supports tmux panes.
+### UI & Appearance
+- **lualine.nvim** - Statusline
+- **material.nvim** - Color scheme
+- **dashboard-nvim** - Start screen
+- **indent-blankline.nvim** - Indent guides
+- **rainbow-delimiters.nvim** - Rainbow parentheses
+- **nvim-colorizer.lua** - Color preview
+- **nvim-notify** - Notifications
+- **dressing.nvim** - Better UI inputs
+- **neoscroll.nvim** - Smooth scrolling
 
-| Mapping      | functionality                          |
-| ------------ | -------------------------------------- |
-| `leader + q` | close tab                              |
-| `ctrl + q`   | close all buffers and exit             |
-| `ctrl + l`   | move to the split on the right         |
-| `ctrl + k`   | move the split above                   |
-| `ctrl + j`   | move to the split on below             |
-| `ctrl + h`   | move the split to the left             |
-| `Tab`        | switch to the next buffer(normal mode) |
-| `S-Tab`      | switch to the previous buffer          |
+### Git Integration
+- **gitsigns.nvim** - Git decorations
+- **lazygit.nvim** - LazyGit integration
+- **vim-fugitive** - Git commands
 
-#### IDE Features
+### Editing & Navigation
+- **Comment.nvim** - Smart commenting
+- **nvim-surround** - Surround operations
+- **nvim-autopairs** - Auto pairs
+- **which-key.nvim** - Keybinding hints
+- **trouble.nvim** - Diagnostics list
+- **todo-comments.nvim** - TODO highlighting
 
-| Mapping       | functionality                        |
-| ------------- | ------------------------------------ |
-| `leader + o`  | organize imports                     |
-| `leader + a`  | run cocAction on what's undercursor  |
-| `leader + s`  | format file with available formatter |
-| `leader + rn` | rename globally                      |
-| `leader + jd` | jump to definition                   |
-| `leader + jy` | jump to type definition              |
-| `leader + ji` | jump to implementation               |
-| `leader + jr` | jump to references                   |
-| `ctrl + a`    | highlight for multi cursor selection |
-| `shift + k`   | show current symbol documentation    |
-| `]g`          | next diagnostic                      |
-| `[g`          | Previous diagnostic                  |
+### AI & Productivity
+- **copilot.lua** - GitHub Copilot integration
+- **CopilotChat.nvim** - Interactive AI chat with Copilot
+- **avante.nvim** - Claude AI assistant (Cursor-like experience)
+  - Powered by Claude Sonnet 4.5
+  - Inline code suggestions and explanations
+  - Side-by-side diff view
+  - Context-aware assistance
 
-#### Flutter
+### Other
+- **toggleterm.nvim** - Terminal management
+- **vim-tmux-navigator** - Tmux integration
+- **markdown-preview.nvim** - Markdown preview
 
-| Mapping | functionality                          |
-| ------- | -------------------------------------- |
-| `F3`    | show list of devices                   |
-| `F4`    | show list of emulators                 |
-| `F5`    | start development server (flutter run) |
+## Keyboard Shortcuts
 
-#### FZF windows
+Leader key: `,` (comma)
 
-| Mapping       | functionality                            |
-| ------------- | ---------------------------------------- |
-| `leader + f`  | files viewer                             |
-| `leader + c`  | show editor commands                     |
-| `leader + /`  | search in current folder files           |
-| `leader + sh` | search / history                         |
-| `leader + b`  | show open buffers                        |
-| `leader + t`  | search current file tags                 |
-| `F1`          | show keyboard shortcuts for current mode |
+### Essential
+| Mapping | Functionality |
+|---------|---------------|
+| `;` | Command mode |
+| `Leader+r` | Reload config |
+| `Leader+w` | Save file |
+| `Leader+q` | Close buffer |
+| `Leader+s` | Format file |
+| `Tab` / `Shift+Tab` | Next/previous buffer |
 
-#### In FZF
+### Navigation
+| Mapping | Functionality |
+|---------|---------------|
+| `Ctrl+h/j/k/l` | Navigate splits/tmux panes |
+| `Leader+e` | Toggle file explorer |
+| `Leader+o` | Focus file explorer |
 
-these only work on an open fzf window
+### Telescope (Fuzzy Finder)
+| Mapping | Functionality |
+|---------|---------------|
+| `Leader+f` | Find files |
+| `Leader+b` | Buffers |
+| `Leader+/` | Live grep |
+| `Leader+fr` | Recent files |
+| `Leader+fh` | Help tags |
 
-| Mapping | Functionality                 |
-| ------- | ----------------------------- |
-| `C-x`   | open file in horizontal split |
-| `C-v`   | open file in vertical split   |
-| `C-t`   | open file in new tab          |
+### Neo-tree (File Explorer)
+| Action | Command/Mapping |
+|--------|-----------------|
+| Toggle tree | `:Neotree toggle` or `Leader+e` |
+| Focus tree | `:Neotree focus` or `Leader+o` |
+| Hide dotfiles by default | Configured (dotfiles start hidden) |
+| Toggle hidden/dotfiles | `H` inside Neo-tree |
+| Set root to current dir | `.` |
+| Go up one level | `<BS>` |
+| `Leader+fk` | Keymaps |
 
-#### Git
+### LSP (CoC.nvim)
+| Mapping | Functionality |
+|---------|---------------|
+| `Leader+jd` | Go to definition |
+| `Leader+jy` | Type definition |
+| `Leader+ji` | Implementation |
+| `Leader+jr` | References |
+| `Leader+rn` | Rename symbol |
+| `Leader+a` | Code actions |
+| `Leader+o` | Organize imports |
+| `K` | Show documentation |
+| `[g` / `]g` | Previous/next diagnostic |
+| `Ctrl+a` | Multi-cursor selection |
 
-| Mapping       | functionality            |
-| ------------- | ------------------------ |
-| `leader + gd` | git diff split           |
-| `leader + gc` | git commits              |
-| `leader + gb` | git blame                |
-| `leader + gs` | git status in fzf window |
+### Git
+| Mapping | Functionality |
+|---------|---------------|
+| `Leader+gg` | LazyGit |
+| `Leader+gd` | Git diff |
+| `Leader+gb` | Git blame |
+| `Leader+gc` | Git commits (Telescope) |
+| `Leader+gs` | Git status (Telescope) |
+| `]h` / `[h` | Next/previous hunk |
+| `Leader+hp` | Preview hunk |
+| `Leader+hb` | Blame line |
 
-## Custom commands
+### Copilot
+| Mapping | Functionality |
+|---------|---------------|
+| `Tab` | Accept Copilot suggestion |
+| `Alt+]` | Next suggestion |
+| `Alt+[` | Previous suggestion |
+| `Ctrl+]` | Dismiss suggestion |
+| `Leader+cc` | Copilot chat toggle |
+| `Leader+ce` | Explain code |
+| `Leader+cr` | Review code |
+| `Leader+cf` | Fix code |
 
-| Command | Functionality                            |
-| ------- | ---------------------------------------- |
-| Format  | format file with any available formatter |
-| OR      | organize imports                         |
-| Rg      | advanced Grep                            |
+### Claude AI (Avante)
+| Mapping | Functionality |
+|---------|---------------|
+| `Leader+aa` | Ask Claude (normal/visual) |
+| `Leader+ar` | Refresh Claude response |
+| `Leader+ae` | Edit with Claude (visual) |
+| `]]` / `[[` | Jump to next/previous diff |
+| `]x` / `[x` | Next/previous conflict |
+| **In Avante sidebar:** | |
+| `<CR>` | Apply suggestion (normal) |
+| `Ctrl+s` | Apply suggestion (insert) |
+| `a` | Apply at cursor |
+| `A` | Apply all |
+| `Tab` / `Shift+Tab` | Switch windows |
 
-## Customizations
+### Other
+| Mapping | Functionality |
+|---------|---------------|
+| `gcc` | Toggle comment (line) |
+| `gc` | Toggle comment (motion) |
+| `Leader+xx` | Toggle Trouble diagnostics |
+| `Leader+tt` | Toggle terminal |
+| `F2` | Trim whitespace |
+| `F6` | Open dashboard |
 
-Since the file is pretty small its very easy to interpret by even those who
-don't have any knowledge about vim script, most of the sections have comments
-about their functionality, and can be removed, commented out or swapped easily,
-there are some defaults that are not everyone's cup of tea (after all this is
-highly opinionated).
+## Commands
 
-- **Disabling Plugins:** comment out the plug's 'Plugin/name' line from config
-  and also remove the plugin settings
+| Command | Functionality |
+|---------|---------------|
+| `:Lazy` | Plugin manager UI |
+| `:Format` | Format file (CoC) |
+| `:OR` | Organize imports |
+| `:Telescope` | Open Telescope |
+| `:Neotree` | File explorer |
+| `:LazyGit` | Open LazyGit |
+| `:AvanteAsk` | Ask Claude AI |
+| `:checkhealth` | Check Neovim health |
 
-- **Disabling CoC Plugins:** comment out the plugin from `coc_global_extensions`
-  variable and uninstall it via `:CocUninstall` plugin name
+## Customization
 
-- **Installing CoC plugins:** open `:CocList` and search for marketplace, you
-  can find all available plugins here
+### Adding Plugins
 
-- **Adding Bookmarks:** to add bookmarks to the start page, find
-  `g:startify_bookmarks` in `init.nvim` and add the new bookmark just like the
-  already present ones, the dictionary key is the shortcut you will use to
-  quickly jump to that folder from the start page and the value is the path to
-  targeted folder
+Edit `lua/plugins/extras.lua` or create a new file in `lua/plugins/`:
 
-for more customizations read throw the config file, there are comments
-everywhere and its easy to interpret, you can also checkout the linked github
-page for each plugin for even more options.
+```lua
+return {
+  {
+    "author/plugin-name",
+    config = function()
+      -- Plugin configuration
+    end,
+  },
+}
+```
 
-## Demos
+### Modifying Keymaps
 
-### Project files with fzf
+Edit `lua/core/keymaps.lua`:
 
-![fzf preview](./Screens/screen1.png)
+```lua
+keymap("n", "<leader>x", ":YourCommand<CR>", opts)
+```
 
-### Project wide search with fzf
+### Changing Options
 
-![Rg preview](./Screens/screen2.png)
+Edit `lua/core/options.lua`:
 
-### Git Status
+```lua
+opt.number = true
+opt.relativenumber = true
+```
 
-![git status](./Screens/screen3.png)
+### CoC Extensions
 
-### workflow demo
+Edit `lua/plugins/coc.lua` to add/remove CoC extensions in `coc_global_extensions`.
 
-[![Workflow Demo](https://img.youtube.com/vi/_R2K0MrGLLI/0.jpg)](https://www.youtube.com/watch?v=_R2K0MrGLLI)
+## Migration from VimScript
+
+This configuration was fully migrated from VimScript to Lua. Old files are backed up as:
+- `init.vim.bak`
+- `statusline.vim.bak`
+
+## Troubleshooting
+
+### Plugins not loading
+```bash
+# Open Neovim and run
+:Lazy sync
+```
+
+### LSP not working
+```bash
+# Check CoC status
+:CocInfo
+
+# Install/update CoC extensions
+:CocUpdate
+```
+
+### TreeSitter issues
+```bash
+:TSUpdate
+:TSInstall <language>
+```
+
+### Claude/Avante not working
+1. Check that your API key is set in `~/.env`:
+   ```bash
+   echo $ANTHROPIC_API_KEY
+   ```
+2. Make sure you sourced your shell config:
+   ```bash
+   source ~/.zshrc
+   ```
+3. Restart Neovim completely
+4. Check for errors: `:messages`
+
+## Performance
+
+- Startup time: ~30-50ms (with lazy loading)
+- All plugins are lazy-loaded based on events, commands, or file types
+- Treesitter for fast syntax highlighting
+- Optimized CoC settings for quick responses
 
 ## Credits
 
-All the Credit goes to the Neovim team for making most of the extensions
-possible and better (async), and to all the plugins developers, and the hackers
-who spend time Finding good shortcuts and tricks to make this an even more
-superb experience.
+- Based on [Blacksuan19's init.nvim](https://github.com/Blacksuan19/init.nvim)
+- Fully modernized with Lua and contemporary plugins
+- Thanks to all plugin authors and the Neovim community
+
+## License
+
+MIT License - Feel free to use and modify!
