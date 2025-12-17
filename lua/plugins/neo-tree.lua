@@ -22,7 +22,19 @@ return {
       vim.cmd([[Neotree close]])
     end,
     init = function()
-      if vim.fn.argc() == 1 then
+      -- Open neo-tree when no file is specified
+      if vim.fn.argc() == 0 then
+        vim.api.nvim_create_autocmd("VimEnter", {
+          callback = function()
+            -- Delay to let Dashboard load first
+            vim.defer_fn(function()
+              vim.cmd("Neotree show")
+            end, 50)
+          end,
+          once = true,
+        })
+      -- Open neo-tree when a directory is specified
+      elseif vim.fn.argc() == 1 then
         local stat = vim.loop.fs_stat(vim.fn.argv(0))
         if stat and stat.type == "directory" then
           require("neo-tree")
