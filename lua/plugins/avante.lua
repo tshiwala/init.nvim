@@ -128,10 +128,73 @@ return {
       {
         -- Make sure to set this up properly if you have lazy=true
         "MeanderingProgrammer/render-markdown.nvim",
+        ft = { "markdown", "Avante" },
         opts = {
           file_types = { "markdown", "Avante" },
+          heading = {
+            -- Thin accent bar instead of the default numeric-box icons.
+            icons = { "▎ ", "▎ ", "▎ ", "▎ ", "▎ ", "▎ " },
+            -- Tint hugs the heading text rather than spanning the window.
+            width = "block",
+            left_pad = 0,
+            right_pad = 1,
+          },
         },
-        ft = { "markdown", "Avante" },
+        config = function(_, opts)
+          -- Stock backgrounds link to DiffText, which is `reverse` in this
+          -- colorscheme — that turns every heading into a solid inverted band
+          -- that reads as an error. Derive a subtle tint from each level's own
+          -- heading colour instead, so it tracks whatever theme is loaded.
+          local function blend(fg, bg, alpha)
+            local function channels(c)
+              return math.floor(c / 65536) % 256, math.floor(c / 256) % 256, c % 256
+            end
+            local fr, fg_, fb = channels(fg)
+            local br, bg_, bb = channels(bg)
+            local mix = function(a, b)
+              return math.floor(a * alpha + b * (1 - alpha) + 0.5)
+            end
+            return string.format("#%02x%02x%02x", mix(fr, br), mix(fg_, bg_), mix(fb, bb))
+          end
+
+          -- Every @markup.heading.N shares one colour in most themes, so levels
+          -- would be indistinguishable once the numeric icons are gone. Borrow
+          -- six accents that any colourscheme defines distinctly instead.
+          local accents = { "Function", "String", "Constant", "Type", "Special", "Identifier" }
+
+          local function style_headings()
+            local normal = vim.api.nvim_get_hl(0, { name = "Normal", link = false })
+            if not normal.bg then
+              return -- transparent background; a tint would be meaningless
+            end
+            for i = 1, 6 do
+              local src = vim.api.nvim_get_hl(0, { name = accents[i], link = false })
+              local fg = src and src.fg
+              if not fg then
+                local fallback = vim.api.nvim_get_hl(0, {
+                  name = "@markup.heading." .. i .. ".markdown",
+                  link = false,
+                })
+                fg = fallback and fallback.fg
+              end
+              if fg then
+                vim.api.nvim_set_hl(0, "RenderMarkdownH" .. i, { fg = fg, bold = true })
+                vim.api.nvim_set_hl(0, "RenderMarkdownH" .. i .. "Bg", {
+                  fg = fg,
+                  bg = blend(fg, normal.bg, 0.12),
+                })
+              end
+            end
+          end
+
+          style_headings()
+          vim.api.nvim_create_autocmd("ColorScheme", {
+            desc = "Re-derive render-markdown heading tints after a theme change",
+            callback = style_headings,
+          })
+
+          require("render-markdown").setup(opts)
+        end,
       },
     },
 
