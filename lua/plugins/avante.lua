@@ -139,6 +139,7 @@ return {
             left_pad = 0,
             right_pad = 1,
           },
+          latex = { enabled = false },
         },
         config = function(_, opts)
           -- Stock backgrounds link to DiffText, which is `reverse` in this

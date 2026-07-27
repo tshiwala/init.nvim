@@ -4,3 +4,5 @@ spell/*
 .netrwhist
 pack/*
 .DS_Store
+.claude/
+.serena/
