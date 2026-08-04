@@ -2,6 +2,28 @@
 
 Append-only log of technical decisions. Newest first.
 
+### Pass USER and HOME into the ACP agent's environment
+
+**Date**: 2026-08-04
+**Status**: Accepted
+
+**Context**: With `provider = "claude-code"` configured, every prompt failed with
+`-32000 "Authentication required"`, even though `initialize` and `session/new`
+both succeeded. Cause: `acp_client.lua:398-415` builds the child environment from
+`PATH` plus the provider's `env` table **only** — its "Start with system
+environment and override with config env" comment is wrong, nothing else is
+inherited. avante's own `codex` default works around this by passing `HOME` and
+`PATH` explicitly; the `claude-code` default does not.
+
+**Decision**: Add `USER` and `HOME` to the `acp_providers["claude-code"].env`
+override.
+
+**Consequences**: Chat authenticates. Bisected to the minimum: `USER` alone is
+sufficient and `HOME` alone still fails, because the macOS keychain lookup for the
+Claude Code credential resolves by user. `HOME` is included anyway — it is where
+the CLI reads settings, project history, and MCP config. Verified end to end: a
+real `session/prompt` returns `stopReason: end_turn` under exactly this env.
+
 ### Route avante chat through Claude Code over ACP instead of the Messages API
 
 **Date**: 2026-08-04

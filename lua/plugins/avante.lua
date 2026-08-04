@@ -56,6 +56,15 @@ return {
             ACP_PATH_TO_CLAUDE_CODE_EXECUTABLE = vim.fn.exepath("claude"),
             -- Upstream default. The agent applies edits without prompting.
             ACP_PERMISSION_MODE = "bypassPermissions",
+            -- avante builds the child env from PATH plus this table alone
+            -- (acp_client.lua:398-415 — the "start with system environment"
+            -- comment there is wrong). USER is what the macOS keychain lookup
+            -- needs to resolve the Claude Code credential; without it every
+            -- session/prompt fails with -32000 "Authentication required".
+            -- HOME is not needed for auth but is what the CLI reads settings,
+            -- project history, and MCP config from.
+            USER = vim.env.USER,
+            HOME = vim.env.HOME,
           },
         },
       },
