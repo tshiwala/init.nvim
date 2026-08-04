@@ -4,7 +4,7 @@ This repository contains a Lua-first Neovim configuration managed by lazy.nvim a
 
 ## Project Structure & Module Organization
 - `init.lua` is the entry point and loads `lua/core` modules (options, keymaps, autocmds, colors).
-- `lua/plugins/` holds lazy.nvim specs, one file per area (treesitter, telescope, neo-tree, git, copilot, coc, etc.) combined via `lua/plugins/init.lua`.
+- `lua/plugins/` holds lazy.nvim specs, one file per area (treesitter, telescope, neo-tree, git, avante, coc, etc.) combined via `lua/plugins/init.lua`.
 - `lua/utils/` contains shared helpers; `coc-settings.json` captures LSP/completion preferences; `lazy-lock.json` pins plugin versions—only change when intentionally updating.
 - Legacy VimScript backups (`init.vim.bak`, `statusline.vim.bak`) and `plugged/` are reference only; avoid adding new code there.
 
@@ -21,7 +21,7 @@ This repository contains a Lua-first Neovim configuration managed by lazy.nvim a
 - For lazy.nvim specs, prefer explicit `opts`/`config` tables and descriptive names over inline one-offs when logic grows.
 
 ## Testing Guidelines
-- After plugin changes, run `:checkhealth` and any plugin-specific checks (`:TSInstall`, `:Copilot status`, etc.) in a relevant buffer.
+- After plugin changes, run `:checkhealth` and any plugin-specific checks (`:TSInstall`, `:CocInfo`, etc.) in a relevant buffer.
 - Avoid committing `lazy-lock.json` churn unless you intend to bump versions; rerun `--headless "+Lazy! sync"` to ensure the lockfile stabilizes.
 
 ## Commit & Pull Request Guidelines

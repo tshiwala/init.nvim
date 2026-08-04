@@ -3,6 +3,33 @@
 -- Cursor-like AI coding assistant powered by Claude
 -- ============================================================================
 
+-- The <leader>c* prompts formerly served by CopilotChat, rebound onto avante.
+-- With a visual selection, avante scopes the question to that selection.
+local function prompt(question)
+  return function()
+    require("avante.api").ask({ question = question })
+  end
+end
+
+-- Inline suggestions stream buffer contents to the API on every pause, so only
+-- arm them once a key is present. Without this, avante's startup init fires a
+-- concealed API-key prompt at every launch on machines where the key is unset.
+local auto_suggestions = vim.env.ANTHROPIC_API_KEY ~= nil
+
+-- avante gates suggestions on buflisted/buftype only — it has no filetype
+-- check at all. Copilot used to carry this opt-out list; without it, inline
+-- AI fires inside git commit messages, notes, and config files.
+local no_suggestions_ft = {
+  gitcommit = true,
+  gitrebase = true,
+  hgcommit = true,
+  svn = true,
+  cvs = true,
+  markdown = true,
+  yaml = true,
+  help = true,
+}
+
 return {
   {
     "yetone/avante.nvim",
@@ -28,7 +55,8 @@ return {
 
       -- Behavior settings
       behaviour = {
-        auto_suggestions = false, -- Don't auto-trigger suggestions (conflicts with Copilot)
+        auto_suggestions = auto_suggestions, -- Uses auto_suggestions_provider on every pause
+        auto_suggestions_respect_ignore = true, -- Never send gitignored files (.env, keys)
         auto_set_highlight_group = true,
         auto_set_keymaps = true,
         auto_apply_diff_after_generation = false,
@@ -48,7 +76,9 @@ return {
           prev = "[x",
         },
         suggestion = {
-          accept = "<M-l>",
+          -- Not <M-l>: iTerm2 sends Option as the raw character by default, so
+          -- a Meta binding never reaches nvim and suggestions can't be accepted.
+          accept = "<C-l>",
           next = "<M-]>",
           prev = "<M-[>",
           dismiss = "<C-]>",
@@ -107,7 +137,6 @@ return {
       "MunifTanjim/nui.nvim",
       --- Optional dependencies
       "echasnovski/mini.icons",
-      "zbirenbaum/copilot.lua", -- for auto-suggestions
       {
         -- support for image pasting
         "HakonHarnes/img-clip.nvim",
@@ -201,6 +230,37 @@ return {
 
     config = function(_, opts)
       require("avante").setup(opts)
+
+      if not auto_suggestions then
+        return
+      end
+
+      -- avante exposes no per-buffer suggestion switch, so drive the instance's
+      -- autocmds directly. pcall'd because this reaches past the public API and
+      -- must fail soft rather than break BufEnter if avante's internals move.
+      vim.api.nvim_create_autocmd({ "BufEnter", "FileType" }, {
+        desc = "Disable avante inline suggestions in commit messages, notes, and config",
+        callback = function(ev)
+          local ok, avante = pcall(require, "avante")
+          if not ok then
+            return
+          end
+          local _, _, suggestion = avante.get()
+          if not suggestion then
+            return
+          end
+          local ft = vim.bo[ev.buf].filetype
+          if ft == "" or no_suggestions_ft[ft] then
+            pcall(function()
+              suggestion:delete_autocmds()
+            end)
+          else
+            pcall(function()
+              suggestion:setup_autocmds()
+            end)
+          end
+        end,
+      })
     end,
 
     -- Keybindings
@@ -227,6 +287,54 @@ return {
         end,
         desc = "Avante: Edit",
         mode = "v",
+      },
+
+      -- Chat prompts inherited from the removed CopilotChat setup
+      {
+        "<leader>cc",
+        function()
+          require("avante").toggle_sidebar()
+        end,
+        desc = "Avante: Toggle chat",
+        -- Its six siblings are n+v; without v here the prefix would fall
+        -- through to the `c` operator and delete the selection.
+        mode = { "n", "v" },
+      },
+      {
+        "<leader>ce",
+        prompt("Explain how this code works."),
+        desc = "Avante: Explain",
+        mode = { "n", "v" },
+      },
+      {
+        "<leader>cr",
+        prompt("Review this code and provide concise suggestions."),
+        desc = "Avante: Review",
+        mode = { "n", "v" },
+      },
+      {
+        "<leader>cf",
+        prompt("Fix any bugs or issues in this code."),
+        desc = "Avante: Fix",
+        mode = { "n", "v" },
+      },
+      {
+        "<leader>co",
+        prompt("Optimize this code to improve performance and readability."),
+        desc = "Avante: Optimize",
+        mode = { "n", "v" },
+      },
+      {
+        "<leader>cd",
+        prompt("Add comprehensive documentation comments to this code."),
+        desc = "Avante: Docs",
+        mode = { "n", "v" },
+      },
+      {
+        "<leader>ct",
+        prompt("Generate unit tests for this code."),
+        desc = "Avante: Tests",
+        mode = { "n", "v" },
       },
     },
   },

@@ -11,8 +11,7 @@ Modern Neovim configuration fully migrated to Lua with contemporary plugins and 
 - 🔍 **Telescope** - Powerful fuzzy finder for files, grep, and more
 - 📁 **Neo-tree** - Modern file explorer with git integration
 - 💡 **CoC.nvim** - Full LSP support for multiple languages
-- 🤖 **GitHub Copilot** - AI-powered code completion
-- 🧠 **Claude AI (Avante)** - Cursor-like AI assistant with Claude Sonnet
+- 🧠 **Claude AI (Avante)** - Cursor-like AI assistant with Claude Sonnet, including inline suggestions
 - 🎯 **Git Integration** - Gitsigns, LazyGit, and Fugitive
 - 📊 **Lualine** - Beautiful customizable statusline
 - 🚀 **Many More** - See full plugin list below
@@ -41,8 +40,7 @@ Modern Neovim configuration fully migrated to Lua with contemporary plugins and 
 
 - **tmux** - For seamless terminal integration
 - **LazyGit** - For git TUI (Leader+gg)
-- **GitHub Copilot** - Requires GitHub Copilot subscription
-- **Claude API** - For Avante AI assistant (get key from https://console.anthropic.com/)
+- **Claude API** - For Avante AI assistant (get key from https://console.anthropic.com/). Export `ANTHROPIC_API_KEY`; inline suggestions stay off unless it is set.
 - **bat** - For better file previews in Telescope
 - **prettier** - For code formatting
 - **black** - For Python formatting
@@ -99,7 +97,6 @@ source ~/.zshrc  # or ~/.bashrc
 │   │   ├── lualine.lua     # Statusline
 │   │   ├── coc.lua         # LSP configuration
 │   │   ├── git.lua         # Git integration
-│   │   ├── copilot.lua     # GitHub Copilot
 │   │   ├── avante.lua      # Claude AI assistant
 │   │   ├── ui.lua          # UI enhancements
 │   │   ├── dashboard.lua   # Start screen
@@ -143,8 +140,6 @@ source ~/.zshrc  # or ~/.bashrc
 - **todo-comments.nvim** - TODO highlighting
 
 ### AI & Productivity
-- **copilot.lua** - GitHub Copilot integration
-- **CopilotChat.nvim** - Interactive AI chat with Copilot
 - **avante.nvim** - Claude AI assistant (Cursor-like experience)
   - Powered by Claude Sonnet 4.5
   - Inline code suggestions and explanations
@@ -223,17 +218,28 @@ Leader key: `,` (comma)
 | `Leader+hp` | Preview hunk |
 | `Leader+hb` | Blame line |
 
-### Copilot
+### Claude AI - inline suggestions
+Off unless `ANTHROPIC_API_KEY` is set, and suppressed in commit messages, markdown, and YAML.
+
 | Mapping | Functionality |
 |---------|---------------|
-| `Tab` | Accept Copilot suggestion |
+| `Ctrl+l` | Accept suggestion |
 | `Alt+]` | Next suggestion |
 | `Alt+[` | Previous suggestion |
 | `Ctrl+]` | Dismiss suggestion |
-| `Leader+cc` | Copilot chat toggle |
+
+### Claude AI - chat prompts
+| Mapping | Functionality |
+|---------|---------------|
+| `Leader+cc` | Toggle chat sidebar |
 | `Leader+ce` | Explain code |
 | `Leader+cr` | Review code |
 | `Leader+cf` | Fix code |
+| `Leader+co` | Optimize code |
+| `Leader+cd` | Document code |
+| `Leader+ct` | Generate tests |
+
+All except `Leader+cc` scope to the visual selection when one is active.
 
 ### Claude AI (Avante)
 | Mapping | Functionality |

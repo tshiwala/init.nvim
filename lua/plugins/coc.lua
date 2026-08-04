@@ -99,15 +99,16 @@ return {
       -- Keymappings
       -- ========================================================================
 
-      local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
+      -- replace_keycodes must stay on: these callbacks return "<TAB>"-style
+      -- notation, which is inserted as literal text without it.
+      local opts = { silent = true, noremap = true, expr = true, replace_keycodes = true }
       local keymap = vim.keymap.set
 
-      -- Tab for completion navigation
-      -- Note: Copilot.lua handles Tab internally when it has a suggestion
-      -- This mapping only triggers when Copilot doesn't have a suggestion
+      -- CoC draws its own floating menu, so the native pumvisible() is always 0
+      -- here — every test below has to go through coc#pum#visible().
       keymap("i", "<TAB>", function()
-        if vim.fn.pumvisible() == 1 then
-          return "<C-n>"
+        if vim.fn["coc#pum#visible"]() == 1 then
+          return vim.fn["coc#pum#next"](1)
         elseif check_back_space() then
           return "<TAB>"
         else
@@ -116,15 +117,20 @@ return {
       end, opts)
 
       keymap("i", "<S-TAB>", function()
-        if vim.fn.pumvisible() == 1 then
-          return "<C-p>"
+        if vim.fn["coc#pum#visible"]() == 1 then
+          return vim.fn["coc#pum#prev"](1)
         else
           return "<C-h>"
         end
       end, opts)
 
       -- Enter to confirm completion
-      keymap("i", "<cr>", [[pumvisible() ? "\<C-y>" : "\<CR>"]], opts)
+      keymap("i", "<cr>", function()
+        if vim.fn["coc#pum#visible"]() == 1 then
+          return vim.fn["coc#pum#confirm"]()
+        end
+        return "<CR>"
+      end, opts)
 
       -- CoC refresh
       keymap("i", "<c-space>", "coc#refresh()", { silent = true, expr = true })

@@ -31,7 +31,6 @@ require("lazy").setup({
   { import = "plugins.telescope" },
   { import = "plugins.neo-tree" },
   { import = "plugins.git" },
-  { import = "plugins.copilot" },
   { import = "plugins.avante" },
   { import = "plugins.coc" },
   { import = "plugins.extras" },
