@@ -16,15 +16,16 @@ local opts = { noremap = true, silent = true }
 -- Use ; for command mode
 keymap("n", ";", ":", { noremap = true })
 
--- Reload neovim config
-keymap("n", "<leader>r", ":source ~/.config/nvim/init.lua<CR>", opts)
+-- Reload neovim config. Doubled because <leader>r prefixes <leader>rn (rename),
+-- and a key that is both a mapping and a prefix stalls for 'timeoutlen'.
+keymap("n", "<leader>rr", ":source ~/.config/nvim/init.lua<CR>", opts)
 
 -- Save and quit
 keymap("n", "<leader>w", ":w<CR>", opts)
 keymap("n", "<leader>q", ":bd<CR>", opts)
 
--- Format code
-keymap("n", "<leader>s", ":Format<CR>", opts)
+-- Format code. Doubled because <leader>s prefixes <leader>sh (search history).
+keymap("n", "<leader>ss", ":Format<CR>", opts)
 
 -- Plugin install
 keymap("n", "<leader>e", ":Lazy<CR>", opts)

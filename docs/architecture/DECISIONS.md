@@ -2,6 +2,30 @@
 
 Append-only log of technical decisions. Newest first.
 
+### Keep every leader key either a mapping or a prefix, never both
+
+**Date**: 2026-08-04
+**Status**: Accepted
+
+**Context**: An audit of all 457 runtime mappings found six leader keys that
+were simultaneously a complete mapping and the prefix of a group — `,a` (coc
+code action, against 18 avante `,a*`), `,c` (Telescope commands, against 7 chat
+`,c*`), `,f`, `,t`, `,r`, `,s`. Vim cannot disambiguate those without waiting,
+so each one stalled for `timeoutlen` on every press.
+
+**Decision**: Rehome the short key in each pair so no single letter is both:
+`,f`→`,ff`, `,c`→`,fc`, `,t`→`,fs`, `,r`→`,rr`, `,s`→`,ss`, `,a`→`,ca`. Also set
+avante's `auto_set_keymaps = false`, which was generating 14 unrequested
+`,a*` mappings; the three that are wanted stay declared in the `keys` table.
+
+**Consequences**: All six stalls gone, 457→437 mappings, verified by re-running
+the audit. The remaining five prefix pairs (`d`/`ds`, `gc`/`gcc`, `gb`/`gbc`,
+`ys`/`yss`, `yS`/`ySS`) are deliberately untouched — they are universal
+plugin conventions and only stall if you pause mid-sequence. Checked first that
+`auto_set_keymaps` does not gate the sidebar-internal or suggestion keys: that
+`if` block closes at init.lua:346 and the suggestion binds are a separate block
+at 348.
+
 ### Pass USER and HOME into the ACP agent's environment
 
 **Date**: 2026-08-04

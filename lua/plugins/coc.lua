@@ -149,8 +149,11 @@ return {
       keymap("n", "<leader>rn", "<Plug>(coc-rename)", { silent = true, desc = "Rename symbol" })
 
       -- Code actions
-      keymap("n", "<leader>a", "<Plug>(coc-codeaction-line)", { silent = true, desc = "Code action (line)" })
-      keymap("x", "<leader>a", "<Plug>(coc-codeaction-selected)", { silent = true, desc = "Code action (selected)" })
+      -- <leader>ca, not <leader>a: avante owns the whole <leader>a* namespace,
+      -- so a bare <leader>a was both a mapping and a prefix and stalled for
+      -- 'timeoutlen' on every press.
+      keymap("n", "<leader>ca", "<Plug>(coc-codeaction-line)", { silent = true, desc = "Code action (line)" })
+      keymap("x", "<leader>ca", "<Plug>(coc-codeaction-selected)", { silent = true, desc = "Code action (selected)" })
 
       -- Organize imports
       keymap("n", "<leader>o", ":OR<CR>", { silent = true, desc = "Organize imports" })

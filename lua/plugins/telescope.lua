@@ -20,12 +20,15 @@ return {
     },
     keys = {
       -- File and buffer navigation (matching your FZF keybindings)
-      { "<leader>f", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
+      -- Everything lives under <leader>f so no single letter is both a mapping
+      -- and a prefix — a short key that prefixes a group stalls for 'timeoutlen'
+      -- on every press. <leader>c and <leader>t belong to avante and toggleterm.
+      { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
       { "<leader>b", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
       { "<leader>/", "<cmd>Telescope live_grep<cr>", desc = "Live Grep" },
-      { "<leader>c", "<cmd>Telescope commands<cr>", desc = "Commands" },
+      { "<leader>fc", "<cmd>Telescope commands<cr>", desc = "Commands" },
       { "<leader>sh", "<cmd>Telescope search_history<cr>", desc = "Search History" },
-      { "<leader>t", "<cmd>Telescope treesitter<cr>", desc = "Treesitter Symbols" },
+      { "<leader>fs", "<cmd>Telescope treesitter<cr>", desc = "Treesitter Symbols" },
 
       -- Git (matching your FZF git keybindings)
       { "<leader>gc", "<cmd>Telescope git_commits<cr>", desc = "Git Commits" },

@@ -159,10 +159,10 @@ Leader key: `,` (comma)
 | Mapping | Functionality |
 |---------|---------------|
 | `;` | Command mode |
-| `Leader+r` | Reload config |
+| `Leader+rr` | Reload config |
 | `Leader+w` | Save file |
 | `Leader+q` | Close buffer |
-| `Leader+s` | Format file |
+| `Leader+ss` | Format file |
 | `Tab` / `Shift+Tab` | Next/previous buffer |
 
 ### Navigation
@@ -175,11 +175,13 @@ Leader key: `,` (comma)
 ### Telescope (Fuzzy Finder)
 | Mapping | Functionality |
 |---------|---------------|
-| `Leader+f` | Find files |
+| `Leader+ff` | Find files |
 | `Leader+b` | Buffers |
 | `Leader+/` | Live grep |
 | `Leader+fr` | Recent files |
 | `Leader+fh` | Help tags |
+| `Leader+fc` | Commands |
+| `Leader+fs` | Treesitter symbols |
 
 ### Neo-tree (File Explorer)
 | Action | Command/Mapping |
@@ -200,7 +202,7 @@ Leader key: `,` (comma)
 | `Leader+ji` | Implementation |
 | `Leader+jr` | References |
 | `Leader+rn` | Rename symbol |
-| `Leader+a` | Code actions |
+| `Leader+ca` | Code actions |
 | `Leader+o` | Organize imports |
 | `K` | Show documentation |
 | `[g` / `]g` | Previous/next diagnostic |

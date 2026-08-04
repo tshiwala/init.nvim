@@ -128,7 +128,11 @@ return {
         auto_suggestions = auto_suggestions, -- Uses auto_suggestions_provider on every pause
         auto_suggestions_respect_ignore = true, -- Never send gitignored files (.env, keys)
         auto_set_highlight_group = true,
-        auto_set_keymaps = true,
+        -- Off: this installs ~14 <leader>a* mappings nobody asked for (?BCMRS,
+        -- d, f, h, m, n, s, t, z). The three that are actually wanted are
+        -- declared in `keys` below. Sidebar-internal keys and the suggestion
+        -- accept/dismiss binds are gated separately, so both survive this.
+        auto_set_keymaps = false,
         auto_apply_diff_after_generation = false,
         support_paste_from_clipboard = false,
       },
