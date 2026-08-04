@@ -30,6 +30,48 @@ local no_suggestions_ft = {
   help = true,
 }
 
+---Mix two 24-bit colours. alpha=1 returns fg untouched, 0 returns bg.
+---@param fg integer
+---@param bg integer
+---@param alpha number
+---@return string hex
+local function blend(fg, bg, alpha)
+  local function channels(c)
+    return math.floor(c / 65536) % 256, math.floor(c / 256) % 256, c % 256
+  end
+  local fr, fg_, fb = channels(fg)
+  local br, bg_, bb = channels(bg)
+  local mix = function(a, b)
+    return math.floor(a * alpha + b * (1 - alpha) + 0.5)
+  end
+  return string.format("#%02x%02x%02x", mix(fr, br), mix(fg_, bg_), mix(fb, bb))
+end
+
+-- avante ships its sidebar separator with fg linked to the panel's *background*
+-- (highlights.lua: AVANTE_SIDEBAR_WIN_SEPARATOR uses fg_link_bg), so the chat
+-- has no visible edge and reads as text floating over the buffer. Give it a
+-- muted rule instead — blended toward the panel background so it frames the
+-- panel without drawing attention to itself.
+local function frame_sidebar()
+  local function hl(name)
+    return vim.api.nvim_get_hl(0, { name = name, link = false })
+  end
+  local panel = hl("NormalFloat")
+  local accent = hl("Function")
+  local bg = panel.bg or hl("Normal").bg
+  local fg = accent.fg or hl("Comment").fg
+  if not (bg and fg) then
+    return -- transparent or minimal theme; a derived rule would be meaningless
+  end
+  local rule = blend(fg, bg, 0.45)
+  for _, group in ipairs({
+    "AvanteSidebarWinSeparator",
+    "AvanteSidebarWinHorizontalSeparator",
+  }) do
+    vim.api.nvim_set_hl(0, group, { fg = rule, bg = bg })
+  end
+end
+
 return {
   {
     "yetone/avante.nvim",
@@ -137,6 +179,11 @@ return {
           align = "center",
           rounded = true,
         },
+        -- The sidebar is a split, so it cannot take a border — it is framed via
+        -- AvanteSidebarWinSeparator above. These two are real floats, and
+        -- avante defaults both to eight blank strings (an invisible border).
+        ask = { border = "rounded" },
+        edit = { border = "rounded" },
       },
 
       -- Highlights
@@ -257,7 +304,18 @@ return {
     },
 
     config = function(_, opts)
+      -- Must precede setup(): highlights.lua only claims a group if it was not
+      -- already defined at first setup, so this is how a theme override sticks.
+      frame_sidebar()
+
       require("avante").setup(opts)
+
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        desc = "Re-derive the avante sidebar frame after a theme change",
+        callback = function()
+          vim.schedule(frame_sidebar) -- after avante reapplies its own groups
+        end,
+      })
 
       if not auto_suggestions then
         return
