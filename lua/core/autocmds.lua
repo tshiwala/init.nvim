@@ -51,6 +51,11 @@ autocmd("CursorHold", {
 -- Spell Checking
 -- ============================================================================
 
+-- Where `zg` (add word) and `zw` (mark bad) write. Set explicitly rather than
+-- relying on the first writable spell/ dir in 'runtimepath', so the word list
+-- lands somewhere predictable and version-controlled.
+vim.opt.spellfile = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
+
 -- Enable spell only for specific file types
 local spellable = { "markdown", "gitcommit", "txt", "text", "liquid", "rst" }
 

@@ -1,6 +1,9 @@
 *autoload/
 *plugged/
-spell/*
+# Track the word lists (spell/*.add) so `zg` additions sync across machines;
+# ignore the compiled binaries, which nvim regenerates from them.
+spell/*.spl
+spell/*.sug
 .netrwhist
 pack/*
 .DS_Store
