@@ -2,6 +2,34 @@
 
 Append-only log of technical decisions. Newest first.
 
+### Route avante chat through Claude Code over ACP instead of the Messages API
+
+**Date**: 2026-08-04
+**Status**: Accepted
+
+**Context**: The `ANTHROPIC_API_KEY` in `~/.env` pointed at an account reporting
+"Credit balance is too low", and merely having it set shadowed the claude.ai
+subscription for every `claude` invocation. Proven directly: `claude -p` with the
+key returns "Credit balance is too low"; the same command with the key unset
+returns normally. This broke the CLI, the remember plugin, and would have broken
+avante's `claude` provider.
+
+**Decision**: Comment the key out of `~/.env`, install
+`@agentclientprotocol/claude-agent-acp`, and set `provider = "claude-code"` with
+an `acp_providers` override. ACP drives the real `claude` binary, so chat
+inherits subscription auth. The override exists because avante's upstream default
+passes `ANTHROPIC_API_KEY` into the adapter's env, which would re-shadow the
+subscription; the default `command` is correct and unchanged.
+
+**Consequences**: Chat works on the subscription with no API key. **Inline
+suggestions do not** — they call the Messages API directly and ACP has no
+completion endpoint, so `auto_suggestions` now resolves to `false` via the
+existing key-presence gate. Getting ghost text back requires funding an API
+account and uncommenting the key. Note `ACP_PERMISSION_MODE = "bypassPermissions"`
+(avante's default) is retained: the agent applies edits without prompting.
+Verified end to end — the adapter answers an ACP `initialize` handshake with
+`authMethods: []`, confirming it needs no client credentials.
+
 ### Split unrelated lockfile pin bumps into their own commit
 
 **Date**: 2026-08-04

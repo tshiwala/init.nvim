@@ -37,9 +37,28 @@ return {
     lazy = false,
     version = false,
     opts = {
-      -- Provider configuration
-      provider = "claude",
+      -- Chat runs through Claude Code over ACP, which authenticates the way the
+      -- `claude` CLI does — i.e. the claude.ai subscription, no API key. The
+      -- direct `claude` provider below bills a separate API account and is kept
+      -- only for the inline-suggestion path, which has no ACP equivalent.
+      provider = "claude-code",
       auto_suggestions_provider = "claude",
+
+      acp_providers = {
+        ["claude-code"] = {
+          -- avante's default `command` (claude-agent-acp) is correct; only the
+          -- env needs overriding. Upstream passes ANTHROPIC_API_KEY through,
+          -- which would shadow the subscription and re-break Claude Code auth.
+          command = "claude-agent-acp",
+          args = {},
+          env = {
+            NODE_NO_WARNINGS = "1",
+            ACP_PATH_TO_CLAUDE_CODE_EXECUTABLE = vim.fn.exepath("claude"),
+            -- Upstream default. The agent applies edits without prompting.
+            ACP_PERMISSION_MODE = "bypassPermissions",
+          },
+        },
+      },
 
       providers = {
         claude = {

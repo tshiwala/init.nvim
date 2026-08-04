@@ -11,15 +11,19 @@ reports 0 errors and 0 warnings, and the working tree is committed.
 
 ## AI assistance
 
-avante.nvim is the sole AI integration, on `provider = "claude"`
-(`claude-sonnet-4-5`). GitHub Copilot was removed on 2026-08-04.
+avante.nvim is the sole AI integration. GitHub Copilot was removed on 2026-08-04.
 
-- **Chat** — `<leader>cc` toggles the sidebar; `<leader>c{e,r,f,o,d,t}` run
-  explain / review / fix / optimize / docs / tests, scoped to the visual
-  selection when one is active. `<leader>a{a,r,e}` remain avante's own bindings.
-- **Inline suggestions** — enabled, but only when `ANTHROPIC_API_KEY` is set, and
-  suppressed in gitcommit, gitrebase, markdown, yaml, and help buffers. Accept
-  with `<C-l>`. Gitignored files are never sent.
+- **Chat** — runs through Claude Code over ACP (`provider = "claude-code"`), so it
+  uses the **claude.ai subscription and needs no API key**. Requires the
+  `@agentclientprotocol/claude-agent-acp` npm package (global).
+  `<leader>cc` toggles the sidebar; `<leader>c{e,r,f,o,d,t}` run explain / review
+  / fix / optimize / docs / tests, scoped to the visual selection when one is
+  active. `<leader>a{a,r,e}` remain avante's own bindings.
+- **Inline suggestions** — **currently off.** They call the Messages API directly,
+  which needs a funded `ANTHROPIC_API_KEY`; ACP has no completion endpoint. The
+  config gates on key presence, and the key is commented out in `~/.env`. If
+  re-enabled they accept with `<C-l>`, skip gitignored files, and stay suppressed
+  in gitcommit, gitrebase, markdown, yaml, and help buffers.
 
 ## Completion
 
@@ -37,19 +41,18 @@ the decisions log.
 
 ## Known issues
 
-- **The remember plugin is not recording.** Every `save-session` fails with
-  `Credit balance is too low`, and warns that `ANTHROPIC_API_KEY` takes
-  precedence over the claude.ai login. `.remember/` has no buffer file and the
-  autonomous logs are empty. See `.remember/logs/memory-2026-08-04.log`.
-- **The same key backs avante.** If that API account is out of credit, avante
-  inline suggestions and chat will fail too — untested as of this writing.
-- **Inline suggestions are shell-dependent.** The key comes from `~/.env` via
-  `~/.zshrc:74`, so nvim launched outside an interactive shell sees no key and
-  suggestions silently stay off.
+- **Inline suggestions are unavailable** until an API account is funded — see the
+  AI assistance section above. Chat is unaffected.
+- **`ACP_PERMISSION_MODE = "bypassPermissions"`** (avante's upstream default) is
+  in effect, so the ACP agent applies edits without prompting.
+
+## Resolved 2026-08-04
+
+- The dead `ANTHROPIC_API_KEY` that shadowed the claude.ai subscription is
+  commented out in `~/.env`. The `claude` CLI and the remember plugin work again.
 
 ## Up next
 
-1. Resolve the credit/auth conflict — either top up the API account or unset
-   `ANTHROPIC_API_KEY` so claude.ai auth is used
-2. Confirm avante chat and inline suggestions actually work end to end
-3. Decide whether `<M-l>` really was unreachable in iTerm2, or revert `<C-l>`
+1. Smoke-test avante chat in a real session — `<leader>cc`, then ask something
+2. Decide whether `<M-l>` really was unreachable in iTerm2, or revert `<C-l>`
+3. Optionally fund an API account if inline ghost text is wanted back
